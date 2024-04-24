@@ -96,60 +96,11 @@ def sum_expenditure_by_month(file_path):
 
     return result_df.to_dict(orient='records') # .to_json()
 
-# for the stacked bar chart, old
-def aggregate_spending_by_category(df):
-    """
-    Aggregate spending by category for each month.
 
-    Parameters:
-    - df: pandas DataFrame with columns 'Date', 'Category', and 'Amount'.
-
-    Returns:
-    - A new DataFrame with months as rows, categories as columns, and the sum of expenditures as values.
-    """
-
-    # Extract year and month from 'Date' and create a new column for it
-    df['YearMonth'] = df['Date'].dt.to_period('M')
-    
-    # Group by the new 'YearMonth' column and 'Category', and sum 'Amount'
-    result_df = df.groupby(['YearMonth', 'Category'])['Amount'].sum().unstack(fill_value=0)
-
-    # Reset the index to make 'YearMonth' a column again
-    result_df.reset_index(inplace=True)
-    
-    # Optionally format 'YearMonth' to 'Month Year' for better readability
-    result_df['YearMonth'] = result_df['YearMonth'].dt.strftime('%B %Y')
-
-    return result_df
-
-# for the stacked bar chart
-def aggregate_spending_by_category_long_form(df):
-    """
-    Aggregate spending by category for each month in a long form.
-
-    Parameters:
-    - df: pandas DataFrame with columns 'Date', 'Category', and 'Amount'.
-
-    Returns:
-    - A new DataFrame in long form with 'YearMonth', 'Category', and 'Amount'.
-    """
-    
-    # Extract year and month from 'Date' and create a new column for it
-    df['YearMonth'] = df['Date'].dt.to_period('M')
-    
-    # Group by the new 'YearMonth' column and 'Category', and sum 'Amount'
-    result_df = df.groupby(['YearMonth', 'Category'])['Amount'].sum().reset_index()
-    
-    # Optionally format 'YearMonth' to 'Month Year' for better readability
-    result_df['YearMonth'] = result_df['YearMonth'].dt.strftime('%B %Y')
-
-    return result_df.to_dict(orient='records')
-
-# check if this works
-def barchart(df):
+def barchart(file_path):
     """
     Aggregate spending by category for each month in a long form suitable for creating datasets
-    for a stacked bar chart in Chart.js.
+    for a stacked bar chart in Chart.js, ensuring chronological order of months.
 
     Parameters:
     - df: pandas DataFrame with columns 'Date', 'Category', and 'Amount'.
@@ -157,28 +108,39 @@ def barchart(df):
     Returns:
     - JSON object with 'labels' and 'datasets' suitable for Chart.js.
     """
-    
-    # Extract year and month from 'Date' and create a new column for it
-    df['YearMonth'] = df['Date'].dt.to_period('M').dt.strftime('%B %Y')
 
+    df = process_csv(file_path)
+    # Extract year and month from 'Date' and create a new column for it, converting to period
+    df['YearMonth'] = df['Date'].dt.to_period('M')
+    
     # Group by the new 'YearMonth' column and 'Category', and sum 'Amount'
     result_df = df.groupby(['YearMonth', 'Category'])['Amount'].sum().unstack(fill_value=0).reset_index()
 
+    # Sort the DataFrame by the datetime period (implicitly does it chronologically)
+    result_df['YearMonth'] = result_df['YearMonth'].dt.to_timestamp()  # Convert to timestamp for sorting
+    result_df.sort_values('YearMonth', inplace=True)
+    result_df['YearMonth'] = result_df['YearMonth'].dt.strftime('%B %Y')  # Convert back to string for display
+
     # Convert the DataFrame to a dictionary that fits the structure needed for Chart.js
     datasets = []
-    for category in result_df.columns[1:]:  # Skip the first column as it is 'YearMonth'
+    colors = {
+        'Dining Out':'#DE3163',
+        'Utilities':'#708090',
+        'Transportation':'#0047AB',
+        'Groceries':'#FDDA0D',
+        'Entertainment':'#C3B1E1',
+        'Health':'#008000',
+    }
+    categories = result_df.columns[1:]  # Skip the 'YearMonth' column
+
+    for category in categories:
         datasets.append({
             'label': category,
             'data': result_df[category].tolist(),
-            'backgroundColor': get_random_color()
+            'backgroundColor': colors[category]
         })
 
     return {
         'labels': result_df['YearMonth'].tolist(),
         'datasets': datasets
     }
-
-def get_random_color():
-    """Generate a random hex color."""
-    import random
-    return "#{:06x}".format(random.randint(0, 0xFFFFFF))

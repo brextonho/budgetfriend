@@ -37,7 +37,6 @@ const FileUpload = ({ onLineChartSuccess, onBarChartSuccess }) => {
         console.log('bar chart DONE')
         onBarChartSuccess(barChartResponse.data); // Call the callback function with the bar chart data
         
-
         setUploadStatus('Data ready.');
       } else {
         // Handle specific errors based on the error message from the server

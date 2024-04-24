@@ -77,7 +77,7 @@ const LineGraph = ({ data }) => {
   };
 
 // height: '300px'
-  return <div style={{ width: '1000px' }}>
+  return <div style={{ width: '70rem' , marginTop: '2rem', marginBottom: '2rem'}}>
     <Line data={chartData} options={options} />
   </div>;
 };

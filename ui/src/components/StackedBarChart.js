@@ -28,15 +28,7 @@ ChartJS.register(
 //     };
 //   };
   
-  function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-  
+
 
 const StackedBarChart = ({ data }) => {
   const chartData = data // processData(data);
@@ -83,9 +75,8 @@ const StackedBarChart = ({ data }) => {
     }
   };
 
-  // return <Bar data={chartData} options={options} />;
-  return <div style={{ width: '1000px' }}>
-    <Bar data={chartData} options={options} />;
+  return <div style={{ width: '70rem' , marginTop: '2rem', marginBottom: '2rem'}}> 
+    <Bar data={chartData} options={options} />
   </div>;
 };
 
