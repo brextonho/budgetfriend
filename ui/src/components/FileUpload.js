@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import LineGraph from './LineGraph';
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
+  const [chartData, setChartData] = useState([]); // State to store chart data, null?
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -20,17 +22,21 @@ const FileUpload = () => {
 
     try {
       setUploadStatus('Uploading...');
-      const response = await axios.post('/upload-csv', formData, {
+      // TODO { API_ENDPOINT } from "$env/static/private
+      const uploadResponse  = await axios.post('http://localhost:5000/upload-csv', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setUploadStatus('Upload successful!');
-      console.log(response.data);
-      // Handle the response data here, like setting it to state or context
+      if (uploadResponse.data.success) {
+        setUploadStatus('Upload successful! Fetching data...');
+        const chartResponse = await axios.get('http://localhost:5000/linechart');
+        setChartData(chartResponse.data);
+        setUploadStatus('Data ready.');
+      }
     } catch (error) {
-      setUploadStatus('Upload failed. Please try again.');
-      console.error(error);
+        setUploadStatus('Upload failed. Please try again.');
+        console.error(error);
     }
   };
 
@@ -45,6 +51,7 @@ const FileUpload = () => {
           Upload
         </button>
         {uploadStatus && <p className="mt-3">{uploadStatus}</p>}
+        {chartData.length > 0 && <LineGraph data={chartData} />}
       </div>
     </div>
   );

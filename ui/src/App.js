@@ -34,8 +34,7 @@ function App() {
         </p>
       </header>
       <FileUpload onSuccess={handleFileUploadSuccess} />
-      {graphData && <LineGraph data={graphData} />}
-
+      {exampleData.length > 0 && <LineGraph data={exampleData} />}
 
 
 

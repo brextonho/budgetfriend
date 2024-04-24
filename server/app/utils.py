@@ -1,4 +1,19 @@
 import pandas as pd
+import os
+
+def find_latest_file(directory):
+    """Returns the path to the latest (most recently modified) file in the specified directory."""
+    # List all files in the directory
+    files = [os.path.join(directory, file) for file in os.listdir(directory)]
+    # Filter out directories, only files are needed
+    files = [f for f in files if os.path.isfile(f)]
+    # Sort files by last modification time
+    files.sort(key=os.path.getmtime, reverse=True)
+    # Return the newest file
+    if files:
+        return files[0]
+    else:
+        return None
 
 def process_csv(filepath):
     # Read the CSV file
@@ -54,7 +69,7 @@ def filter_by_month(df, month):
 
 
 # for the line chart
-def sum_expenditure_by_month(df):
+def sum_expenditure_by_month(file_path):
     """
     Sum the expenditure by month, with the month and year formatted as 'January 2019', etc.
 
@@ -64,7 +79,8 @@ def sum_expenditure_by_month(df):
     Returns:
     - A new DataFrame with 'Month' and 'Total Expenditure' columns.
     """
-    
+    # TODO how do you have it processed once then used by all get functions?
+    df = process_csv(file_path)
     # Group by year and month, and sum the amounts
     df_grouped = df.groupby(df['Date'].dt.to_period("M"))['Amount'].sum().reset_index()
 
@@ -77,9 +93,9 @@ def sum_expenditure_by_month(df):
     # Rename columns and select only the needed ones
     result_df = df_grouped[['Month', 'Amount']].rename(columns={'Amount': 'Total Expenditure'})
 
-    return result_df
+    return result_df.to_dict(orient='records') # .to_json()
 
-# for the stacked bar chart
+# for the stacked bar chart, old
 def aggregate_spending_by_category(df):
     """
     Aggregate spending by category for each month.
