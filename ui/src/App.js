@@ -4,17 +4,7 @@ import LineGraph from './components/LineGraph';
 
 function App() {
   const [graphData, setGraphData] = useState(null);
-  
-  // TODO delete Mock data for the sake of demonstration
-  // Replace this with the actual data received from the backend after successful file upload
-  const exampleData = [
-    { Month: 'January 2019', TotalExpenditure: 2457.76 },
-    { Month: 'February 2019', TotalExpenditure: 3299.60 },
-    { Month: 'March 2019', TotalExpenditure: 2457.76 },
-    { Month: 'April 2019', TotalExpenditure: 3299.60 },
-    { Month: 'May 2019', TotalExpenditure: 2457.76 },
-    { Month: 'June 2019', TotalExpenditure: 3299.60 },
-  ];
+
 
   const handleFileUploadSuccess = (uploadedData) => {
     // Set the graph data when the file upload is successful and data is received
@@ -25,7 +15,7 @@ function App() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white">
       <header className="text-center p-4">
         <h3 className="text-3xl font-semibold">
-          Welcome to <span className=" text-yellow-500">BudgetFriend</span>
+          Welcome to <span className="text-yellow-500">BudgetFriend</span>
         </h3>
         <p className="text-gray-300 mt-3">
           Please upload your CSV by selecting or dragging your file below.
@@ -34,10 +24,7 @@ function App() {
         </p>
       </header>
       <FileUpload onSuccess={handleFileUploadSuccess} />
-      {exampleData.length > 0 && <LineGraph data={exampleData} />}
-
-
-
+      {graphData && <LineGraph data={graphData} />}
     </div>
   );
 }

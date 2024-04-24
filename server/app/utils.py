@@ -68,7 +68,7 @@ def filter_by_month(df, month):
     return filtered_df
 
 
-# for the line chart
+# for the line chart, total expenditure
 def sum_expenditure_by_month(file_path):
     """
     Sum the expenditure by month, with the month and year formatted as 'January 2019', etc.
@@ -91,7 +91,7 @@ def sum_expenditure_by_month(file_path):
     df_grouped['Month'] = df_grouped['Date'].dt.strftime('%B %Y')
 
     # Rename columns and select only the needed ones
-    result_df = df_grouped[['Month', 'Amount']].rename(columns={'Amount': 'Total Expenditure'})
+    result_df = df_grouped[['Month', 'Amount']] #.rename(columns={'Amount': 'Total Expenditure'})
 
     return result_df.to_dict(orient='records') # .to_json()
 
@@ -142,4 +142,4 @@ def aggregate_spending_by_category_long_form(df):
     # Optionally format 'YearMonth' to 'Month Year' for better readability
     result_df['YearMonth'] = result_df['YearMonth'].dt.strftime('%B %Y')
 
-    return result_df
+    return result_df.to_dict(orient='records')
