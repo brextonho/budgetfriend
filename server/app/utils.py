@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import os
 
 def find_latest_file(directory):
@@ -143,3 +144,41 @@ def aggregate_spending_by_category_long_form(df):
     result_df['YearMonth'] = result_df['YearMonth'].dt.strftime('%B %Y')
 
     return result_df.to_dict(orient='records')
+
+# check if this works
+def barchart(df):
+    """
+    Aggregate spending by category for each month in a long form suitable for creating datasets
+    for a stacked bar chart in Chart.js.
+
+    Parameters:
+    - df: pandas DataFrame with columns 'Date', 'Category', and 'Amount'.
+
+    Returns:
+    - JSON object with 'labels' and 'datasets' suitable for Chart.js.
+    """
+    
+    # Extract year and month from 'Date' and create a new column for it
+    df['YearMonth'] = df['Date'].dt.to_period('M').dt.strftime('%B %Y')
+
+    # Group by the new 'YearMonth' column and 'Category', and sum 'Amount'
+    result_df = df.groupby(['YearMonth', 'Category'])['Amount'].sum().unstack(fill_value=0).reset_index()
+
+    # Convert the DataFrame to a dictionary that fits the structure needed for Chart.js
+    datasets = []
+    for category in result_df.columns[1:]:  # Skip the first column as it is 'YearMonth'
+        datasets.append({
+            'label': category,
+            'data': result_df[category].tolist(),
+            'backgroundColor': get_random_color()
+        })
+
+    return {
+        'labels': result_df['YearMonth'].tolist(),
+        'datasets': datasets
+    }
+
+def get_random_color():
+    """Generate a random hex color."""
+    import random
+    return "#{:06x}".format(random.randint(0, 0xFFFFFF))

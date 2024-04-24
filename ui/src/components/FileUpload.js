@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import LineGraph from './LineGraph';
 
-const FileUpload = ({ onSuccess }) => { 
+const FileUpload = ({ onLineChartSuccess, onBarChartSuccess }) => { 
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
 
@@ -30,16 +29,31 @@ const FileUpload = ({ onSuccess }) => {
 
       if (uploadResponse.data.success) {
         setUploadStatus('Upload successful! Fetching data...');
-        // TODO { API_ENDPOINT } from "$env/static/private
         const lineChartResponse = await axios.get('http://localhost:5000/linechart');
-        onSuccess(lineChartResponse.data); // Call the passed callback function with the chart data
+        onLineChartSuccess(lineChartResponse.data); // Call the callback function with the line chart data
+        console.log('line chart DONE')
+
+        const barChartResponse = await axios.get('http://localhost:5000/barchart');
+        console.log('bar chart DONE')
+        onBarChartSuccess(barChartResponse.data); // Call the callback function with the bar chart data
+        
+
         setUploadStatus('Data ready.');
       } else {
-        setUploadStatus(uploadResponse.data.error || 'Upload failed. Please try again.');
+        // Handle specific errors based on the error message from the server
+        if (uploadResponse.data.error === "Invalid file type") {
+          setUploadStatus('Invalid file type uploaded. Please upload a CSV file.');
+        } else {
+          setUploadStatus(uploadResponse.data.error || 'Upload failed. Please try again.');
+        }
       }
     } catch (error) {
+      if (error.response && error.response.data.error === "Invalid file type") {
+        setUploadStatus('Invalid file type uploaded. Please upload a CSV file.');
+      } else {
         setUploadStatus('Upload failed. Please try again.');
-        console.error(error);
+      }
+      console.error(error);
     }
   };
 
