@@ -54,7 +54,6 @@ def linechart():
         return jsonify(error=str(e)), 500
 
 
-# TODO
 @app.route('/barchart', methods=['GET'])
 def barchart():
     try:

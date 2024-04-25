@@ -58,7 +58,7 @@ const FileUpload = ({ onLineChartSuccess, onBarChartSuccess }) => {
 
   // frontend
   return (
-    <div className="container mx-auto mt-5">
+    <div className="container mx-auto mt-2">
       <div className="flex flex-col items-center">
         <input type="file" onChange={handleFileChange} className="mb-6" />
         <button

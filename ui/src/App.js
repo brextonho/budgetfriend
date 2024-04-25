@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white">
-      <header className="text-center p-4">
+      <header className="text-center p-8">
         <h3 className="text-3xl font-semibold">
           Welcome to <span className="text-yellow-500">BudgetFriend</span>
         </h3>
