@@ -75,16 +75,16 @@ Additional tools:
 A Jupyter notebook (server/charttesting.ipynb) was used for initial data exploration using Plotly.
 
 ### Workflow
-Upon uploading the .csv file in React frontend, the <code>FileUpload</code> component calls the <code>/upload-csv POST</code> function in Flask <code>routes.py</code> to upload the csv file into /uploads folder. If successful, it will call the <code>/linechart</code> and <code>/barchart</code> <code>GET</code> functions in Flask for the json data, for it to be passed to the <code>LineChart</code> and <code>StackedBarChart</code> react-chartjs-2 components, which would then render on the main page.
+Upon uploading the `.csv` file in React frontend, the <code>FileUpload</code> component calls the <code>/upload-csv POST</code> function in Flask <code>routes.py</code> to upload the csv file into <code>/uploads</code> folder. If successful, it will call the <code>/linechart</code> and <code>/barchart</code> <code>GET</code> functions in Flask for the json data, for it to be passed to the <code>LineChart</code> and <code>StackedBarChart</code> react-chartjs-2 components, which would then render on the main page.
 
 1. **File Upload Initiation:**
-Users select a .csv file to upload via the React frontend's <code>FileUpload</code> component. This component includes input validation to ensure that the file format is correct before it is sent to the backend.
+Users select a `.csv` file to upload via the React frontend's <code>FileUpload</code> component. This component includes input validation to ensure that the file format is correct before it is sent to the backend.
 
 2. **File Transmission to Backend:**
 The selected file is sent to the backend Flask server by making a <code>POST</code> request to the <code>/upload-csv</code> endpoint in Flask <code>routes.py</code>. This endpoint is responsible for handling incoming file uploads.
 
 3. **Server-Side File Handling:**
-Upon receiving the file, the Flask application verifies its type and integrity. If the file is not a valid .csv, an error response is generated and sent back to the frontend.
+Upon receiving the file, the Flask application verifies its type and integrity. If the file is not a valid `.csv`, an error response is generated and sent back to the frontend.
 Valid files are saved to the <code>/uploads</code> folder on the server. The server then responds with a success status if the file has been successfully saved.
 
 4. **Data Processing and Visualization:**
@@ -107,5 +107,6 @@ These charts are then displayed on the main page, allowing users to visually ana
 ![date_picker](https://github.com/brextonho/budgetfriend/assets/88436113/ba7d8910-884c-4548-b29f-aa9e0f6efb7b)
 
 
-3. **Security:**  If this application is adapted for medical purposes involving sensitive data, it should be hosted locally or on an internal server, rather than on a remote server or cloud. This precaution helps prevent unauthorized access to or caching of sensitive information.
-4. **Proper handling of endpoints:** Change localhost to <code>{ API_ENDPOINT } from "$env/static/private</code> in <code>FileUpload</code> to allow for variable endpoints and security purposes
+3. **File upload drag and drop:** Allow for more convenience and quality of life
+4. **Security:**  If this application is adapted for medical purposes involving sensitive data, it should be hosted locally or on an internal server, rather than on a remote server or cloud. This precaution helps prevent unauthorized access to or caching of sensitive information.
+5. **Proper handling of endpoints:** Change localhost to <code>{ API_ENDPOINT } from "$env/static/private</code> in <code>FileUpload</code> to allow for variable endpoints and security purposes
