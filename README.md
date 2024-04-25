@@ -19,7 +19,7 @@ Follow these steps to set up and run BudgetFriend on your local machine:
 
 1. **Clone the GitHub repository:**
     ```bash
-    git clone https://github.com/yourusername/BudgetFriend.git
+    git clone https://github.com/brextonho/BudgetFriend.git
     cd BudgetFriend
     ```
 
