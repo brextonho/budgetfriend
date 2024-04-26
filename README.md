@@ -98,6 +98,8 @@ Each endpoint returns JSON data that encapsulates the chart-ready information.
 Upon receiving the JSON data from each respective <code>GET</code> request, the frontend uses this data to render the <code>LineChart</code> and <code>StackedBarChart</code> components using react-chartjs-2.
 These charts are then displayed on the main page, allowing users to visually analyze their expense patterns over time and by category.
 
+![dataflow](https://github.com/brextonho/budgetfriend/assets/88436113/86592e82-58a6-495c-94d9-be21c78e4a95)
+
 
 ## Possible Improvements
 1. **Support for Excel Files:** Extend file upload capabilities to include .xlsx files by modifying the <code>ALLOWED_EXTENSIONS</code> in the Flask application.
@@ -108,5 +110,8 @@ These charts are then displayed on the main page, allowing users to visually ana
 
 
 3. **File upload drag and drop:** Allow for more convenience and quality of life
-4. **Security:**  If this application is adapted for medical purposes involving sensitive data, it should be hosted locally or on an internal server, rather than on a remote server or cloud. This precaution helps prevent unauthorized access to or caching of sensitive information.
+4. **Identify and catch more errors:** Eg. Incorrect column names, Invalid column dtypes
 5. **Proper handling of endpoints:** Change localhost to <code>{ API_ENDPOINT } from "$env/static/private</code> in <code>FileUpload</code> to allow for variable endpoints and security purposes
+6. **Delete stored data files:** Automatically delete stored .csv files after a certain period, or after app is closed
+7. **Security:**  If this application is adapted for medical purposes involving sensitive data, it should be hosted locally or on an internal server, rather than on a remote server or cloud. This precaution helps prevent unauthorized access to or caching of sensitive information.
+
